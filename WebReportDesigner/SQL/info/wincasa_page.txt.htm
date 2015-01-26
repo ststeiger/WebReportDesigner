@@ -1,0 +1,663 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1"><title>
+
+</title><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+      <style type="text/css" media="all">
+        html
+        {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
+        
+        body
+        {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: #E0E0E0;
+        }
+        
+        
+        .awpageheader {
+            background: #666 url("pageHeaderBG.jpg") repeat-x;
+            height: 40px;
+            text-align: left;
+            padding-left: 1em;
+            
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            
+        }
+
+
+        
+        /* change icons dots
+        .jstree-neoclassic-portal .jstree-open > ins {  background:url("closedimage.gif") 0px 0px no-repeat !important; } 
+        .jstree-neoclassic-portal .jstree-closed > ins {  background:url("openimage.gif") 0px 0px no-repeat !important; }
+        */
+        
+        
+        /*
+        .jstree-neoclassic-portal .jstree-open > a .jstree-icon { background:url("openimage.gif") 0px 0px no-repeat ;  }
+        .jstree-neoclassic-portal .jstree-closed a ins.jstree-icon {background:url("closedimage.gif") 0px 0px no-repeat ;  }
+        .jstree-neoclassic-portal .jstree-leaf a ins.jstree-icon {background:url("closedimage.gif") 0px 0px no-repeat ;  }
+        */
+    </style>
+
+
+    <script type="text/javascript" src="/COR_Basic_Wincasa/JQuery/js/jquery-1.8.3.min.js?no_cache_LastWriteTimeUtc=1362405848789"></script>
+    <script type="text/javascript" src="/COR_Basic_Wincasa/JQuery/plugins/TreeView/jquery.cookie.js?no_cache_LastWriteTimeUtc=1362405849196"></script>
+	<script type="text/javascript" src="/COR_Basic_Wincasa/JQuery/plugins/TreeView/jquery.hotkeys.js?no_cache_LastWriteTimeUtc=1362405849212"></script>
+    <script type="text/javascript" src="/COR_Basic_Wincasa/JQuery/plugins/TreeView/jquery.jstree.js?no_cache_LastWriteTimeUtc=1362405849305"></script>
+
+    
+    <script type="text/javascript">
+    
+
+    Date.prototype.getTicksUTC = function() 
+    {
+        return Date.parse(this.toUTCString()) + this.getUTCMilliseconds();
+    } // End Function getTicksUTC
+
+    
+    jQuery.fn.center = function () 
+    {
+        this.css("position","absolute");
+        this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + 
+                                                    $(window).scrollTop()) + "px");
+        this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + 
+                                                    $(window).scrollLeft()) + "px");
+        return this;
+    }
+    
+    
+    function GetCustomerSetting(tblThisSetting, strKey, strColumn)
+    {
+        if (!strKey)
+        {
+            alert("no key");
+            return;
+        } // if (!strKey)
+
+        strKey = strKey.toLowerCase();
+
+        for (var i = 0; i < tblThisSetting.length; ++i)
+        {
+            var str = tblThisSetting[i]["VPT_Key"];
+            if (str)
+                str = str.toLowerCase();
+
+            if (str == strKey)
+            {
+                return str = tblThisSetting[i][strColumn];
+            }
+        } // Next i
+
+        return null;
+    } // End function GetCustomerSetting
+    
+    
+        var tblTreeSettings = [
+          {
+              "VPT_UID": "dc7369af-7717-4e3c-94fe-80fba9469f26",
+              "VPT_Customer": "Wincasa",
+              "VPT_Key": "ShowPopup",
+              "VTP_Rel_ROOT": false,
+              "VTP_Rel_SO": false,
+              "VTP_Rel_SK": false,
+              "VTP_Rel_STR": true,
+              "VTP_Rel_GB": false,
+              "VTP_Rel_GS": true,
+              "VTP_Rel_KA": false,
+              "VTP_Rel_KAT": true
+          }
+        ];
+
+    
+    
+    var strProc = "administrator";
+    var counter = 3;
+    var DOT_INTERVAL = 500;
+
+    function alernateDots() 
+    {
+        if (counter == 4) 
+            counter = 1;
+        //{ counter++; return; }
+
+        var strDots = "";
+        for(var i= 0; i < counter; ++i)
+        {
+            strDots += ".";
+        }
+
+        counter += 1;
+
+        $('#dots').html(strDots);
+    } // End Function alernateDots
+
+
+    var timer;
+    
+    function showWaitBox()
+    {
+        $('#divPleaseWait').css('display','block');
+        $('#divPleaseWait').center();
+        
+        timer = window.setInterval(alernateDots, DOT_INTERVAL);
+    }
+
+    function hideWaitBox()
+    {
+        $('#divPleaseWait').css('display','none');
+        window.clearInterval(alernateDots);
+    }
+
+    
+    function JS_PopupCenterScreen(strPageURL, strWindowName, iWindowWidth, iWindowHeight) 
+    {
+        // MM_openBrWindow v4.0
+        if ( typeof this.winLastOpened == 'undefined' ) 
+        { this.winLastOpened = null; }
+    
+        //if(this.winLastOpened)
+        //{ this.winLastOpened.close(); this.winLastOpened=null;}
+
+
+        //alert(screen.width  + " " + screen.height);
+        if ((screen.width < 1280) || (screen.height < 1024)) 
+        {
+            // 1152x864
+            iWindowWidth = Math.min(iWindowWidth, 1152);
+            iWindowHeight = Math.min(iWindowHeight, 864); 
+        }
+
+
+        if ((screen.width < 1152) || (screen.height < 864)) 
+        {
+            //1024x768
+            iWindowWidth = Math.min(iWindowWidth, 1024);
+            iWindowHeight = Math.min(iWindowHeight, 768); 
+        }
+
+
+        if ((screen.width < 1024) || (screen.height < 768)) 
+        {
+            // 800x600
+            iWindowWidth = Math.min(iWindowWidth, 800);
+            iWindowHeight = Math.min(iWindowHeight, 600); 
+        }
+        
+        
+        if ((screen.width < 800) || (screen.height < 600)) 
+        {
+            // 720x576
+            iWindowWidth = Math.min(iWindowWidth, 720);
+            iWindowHeight = Math.min(iWindowHeight, 576); 
+        }
+
+        // Standard
+        if ((screen.width < 720) || (screen.height < 576)) 
+        {
+            // 640x480
+            iWindowWidth = Math.min(iWindowWidth, 640);
+            iWindowHeight = Math.min(iWindowHeight, 480); 
+        }
+
+
+        if ((screen.width < 640) || (screen.height < 480)) 
+        {
+            // 480x360
+            iWindowWidth = Math.min(iWindowWidth, 480);
+            iWindowHeight = Math.min(iWindowHeight, 360); 
+        }
+
+        if ((screen.width < 480) || (screen.height < 360)) 
+        {
+            // 360x270
+            iWindowWidth = Math.min(iWindowWidth, 360);
+            iWindowHeight = Math.min(iWindowHeight, 270); 
+        }
+
+
+        //iWindowWidth = screen.availWidth;
+        //iWindowHeight = screen.availHeight;
+
+        
+        iWindowWidth = screen.width;
+        iWindowHeight = screen.height;
+        
+        
+        var iLeftMargin = (screen.width/2)-(iWindowWidth/2);
+        var iTopMargin = (screen.height/2)-(iWindowHeight/2);
+        
+        if(iTopMargin > 60)
+            iTopMargin -= 60;
+        
+        //alert(strPageURL);
+        strWindowName = "_blank";
+        
+        /*
+        // Addition: Using IE9 security hole to display as new tab instead of popup
+        if ($.browser.msie && parseInt($.browser.version) == 9) 
+        {
+            var lnk = document.getElementById("ieLink");
+            lnk.href = strPageURL;
+            lnk.click();
+            return;
+        }
+        */
+        // End Addition
+
+        this.winLastOpened = window.open (strPageURL, strWindowName, 'toolbar=no, location=yes, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width='+iWindowWidth+', height='+iWindowHeight+', top='+iTopMargin+', left='+iLeftMargin);
+        //this.winLastOpened = window.open (strPageURL, "_blank");
+
+        if(this.winLastOpened)
+            this.winLastOpened.focus();
+
+    } // End Function JS_PopupCenterScreen
+
+
+
+    // -------------- jsTree AUX -------------- 
+
+    
+    function refreshNode(strNodeID) {
+        // http://stackoverflow.com/questions/3682045/how-can-i-refresh-the-contents-of-a-jstree
+        try 
+        {
+            if (strNodeID == null) {
+                $('#divJsTreeNavigation').jstree('refresh');
+            }
+            else
+                $('#divJsTreeNavigation').jstree('refresh'); // TODO: NodeID only
+        }
+        catch (ex)
+        { }
+
+    } // End Function refreshNode
+
+    var bNavigateOnSelection = true;
+
+    function openNode(strNodeID) 
+    {
+        try 
+        {
+            bNavigateOnSelection = false;
+            $('#divJsTreeNavigation').jstree('deselect_all');
+            $('#divJsTreeNavigation').jstree('close_all');
+
+            $('#divJsTreeNavigation').jstree("open_node", strNodeID);
+            $('#divJsTreeNavigation').jstree("select_node", $(strNodeID));
+
+            var arrPath = $('#divJsTreeNavigation').jstree("get_path", $(strNodeID), true);
+
+            var strUID = arrPath[1];
+
+            if (strUID != null)
+                strNodeID = '#' + strUID;
+            
+            //$('html, body').animate({ scrollTop: $(strNodeID).offset().top }, 1000); 
+        } // End Try
+        catch(ex) 
+        {
+            //alert(ex);
+        } // End Catch
+        finally 
+        {
+            bNavigateOnSelection = true;
+        } // End Finally
+
+    } // End Function openNode
+
+
+    // ------------------ jsTree ------------------
+
+
+    //alert(new Date().getTicksUTC());    
+    function OnGetNodes(n) 
+    {
+        //basically, these are the parameters to be passed to the server code [they MUST match exaclty, casing and all]
+
+        var obj = {
+             id: n.attr ? n.attr("id") : "NULL"
+            ,rel: n.attr ? n.attr("rel") : "NULL"
+            ,mdata: n.attr ? n.attr("mdata") : "NULL"
+            ,proc: strProc 
+        } // End obj
+
+        // return { id : n.attr ? n.attr("id") : 0 }; 
+        // return Sys.Serialization.JavaScriptSerializer.serialize(obj);
+        return obj;
+    } // End Function OnGetNodes
+
+
+
+
+
+    function OnNodesRetrievedSuccess(result, textstatus, xhr) 
+    {
+        //alert(JSON.stringify(result));
+        
+        if(result.hasError)
+        {
+            if(result.error.sessionExpired)
+            {
+                if(parent)
+                {
+                    if(parent.frmDMSmain)
+                        parent.frmDMSmain.window.location = "/COR_Basic_Wincasa/Portal/SessionExpired.aspx?no_cache_LastWriteTimeUtc=1362405852160?instance=B5214DB1-4340-4733-92AA-2BF224B39A9A&message=" + result.error.originalMessage;
+                    else
+                        parent.location = "/COR_Basic_Wincasa/Portal/SessionExpired.aspx?no_cache_LastWriteTimeUtc=1362405852160?instance=B5214DB1-4340-4733-92AA-2BF224B39A9B&message=" + result.error.originalMessage;
+                }
+                else
+                    window.location = "/COR_Basic_Wincasa/Portal/SessionExpired.aspx?no_cache_LastWriteTimeUtc=1362405852160?instance=B5214DB1-4340-4733-92AA-2BF224B39A9C&message=" + result.error.originalMessage;
+            }
+            else
+            {
+                alert("Beim Verarbeiten der Navigations-TreeView ist ein Fehler aufgetreten. \n\nFehlerbeschreibung: \n" + result.error.message + "\n\nStacktrace: \n" + result.error.stackTrace);
+                return null;
+            }
+        }
+        
+        return result.data;
+        
+        //the ".d" is a security feature, annoying, but necessary
+        //return Sys.Serialization.JavaScriptSerializer.deserialize(data.d);
+    } // End Function OnNodesRetrievedSuccess
+
+
+    function OnNodesRetrievedError(xhr, textstatus, errorThrown) 
+    {
+        if(xhr != null)
+        {
+            if(xhr.status != 200)
+            {
+                if(xhr.status == 0)
+                {
+                    var strText = "status 0 appears when an ajax call was CANCELLED \n";
+                    strText += "before getting the response by REFRESHING the page \n";
+                    strText += "or by requesting a URL that is UNREACHABLE. \n";
+                    strText += "this status is not documented but exist over ajax and makeRequest call's from gadget.io.\n";
+                } // End if(xhr.status == 0)
+                else
+                    alert(textstatus + "\n" + "HTTP " + xhr.status + "\n" + errorThrown);
+            } // End if(xhr.status != 200)
+        }
+        else
+            alert("Error: xhr is null");
+    } // End Function OnNodesRetrievedError
+
+    
+
+    // http://www.codeproject.com/KB/aspnet/FileManagerMVC3JSTree.aspx
+    
+
+    $(function () {
+        $("#divJsTreeNavigation").jstree({
+            "json_data": {
+                "ajax": {
+                  "url": "/COR_Basic_Wincasa/ajax/Basic_NavigationTree.ashx?no_cache_LastWriteTimeUtc=1362405846331?no_cache=" + new Date().getTicksUTC().toString()
+				, "async": true
+
+			    , contentType: "application/x-www-form-urlencoded; charset=utf-8"
+                    //,contentType: "application/json; charset=utf-8" 
+                , dataType: "text json"
+			    , type: "POST"
+                  //, type: "GET" 
+
+                , "data": function (n) {
+                    return OnGetNodes(n);
+                } // End 
+
+                , success: function (data, textstatus, xhr) {
+                    //alert(data);
+                    //alert(textstatus);
+                    //alert(xhr);
+                    return OnNodesRetrievedSuccess(data, textstatus, xhr)
+                } // End success
+
+                , error: function (xhr, textstatus, errorThrown) {
+                    //alert(errorThrown);
+                    //alert(textstatus);
+                    //alert(xhr);
+                    OnNodesRetrievedError(xhr, textstatus, errorThrown)
+                } // End error
+
+                } // End ajax
+            } // End json_data
+
+
+        , "themes": {
+              "theme": "neoclassic-portal" 
+            , "dots": true 
+            , "icons": true 
+        }
+
+        , "plugins": ["themes", "json_data", "ui"]
+        })
+
+    .bind("loaded.jstree", function (event, data) {
+        // http://stackoverflow.com/questions/4171111/jstree-open-a-branch
+        // $('#divJsTreeNavigation').jstree("open_node","#54bfed8d-04b7-4c9a-9244-e2338fa128f9");
+        //data.inst.open_node("#54bfed8d-04b7-4c9a-9244-e2338fa128f9");
+        data.inst.open_node("#NULL");
+    })
+
+    .bind("select_node.jstree", function (e, data) {
+        if (!bNavigateOnSelection)
+            return;
+        
+        //var strTarget = data.rslt.obj.children('a').attr('target');
+        //var strHREF = data.rslt.obj.children('a').attr('href');
+
+        //if(window.parent && window.parent.mainFrame)
+        //    window.parent.mainFrame.frames[strTarget].location.href = strHREF;
+        //else
+        //    window.parent.frames[strTarget].location.href = strHREF;
+        //    //window.parent[strTarget].location.href = strHREF;
+        //        
+
+        //alert("Selected node = "+ data.rslt.obj.attr("id"));
+        //alert("Parent of Selected node = "+ data.inst._get_parent(data.rslt.obj).attr("id"))
+
+        //var nodetext = data.rslt.obj.text();
+        //alert(nodetext);
+
+         //var str = JSON.stringify(data);
+        //var MetaData = JSON.parse(str);
+
+
+        var strId = data.rslt.obj.attr('id');
+        var strRel = data.rslt.obj.attr('rel');
+
+        var ids = data.inst.get_path('#' + strId,true);
+        var names = data.inst.get_path('#' + strId,false); 
+        
+        var bShowPopup = false;
+        var MetaData = jQuery.parseJSON(data.rslt.obj.attr("mdata"));
+
+
+        //alert(strId + ", " + strRel);
+        //alert(JSON.stringify(e));
+        //alert($.toJSON(e));
+       
+        var arg1 = "";
+        var arg2 = "";
+        var arg3 = "";
+        
+        
+        switch(strRel)
+        {
+            case "ROOT":
+                return;
+            case "SO":
+                //bShowPopup = true;
+                bShowPopup = GetCustomerSetting(tblTreeSettings, "ShowPopup", "VTP_Rel_" + strRel);
+                var arg1 = names[names.length-1];
+                break;
+            case "SK":
+                break;
+            case "STR":
+                //bShowPopup = true;
+                bShowPopup = GetCustomerSetting(tblTreeSettings, "ShowPopup", "VTP_Rel_" + strRel);
+                break;
+            case "GB":
+                //bShowPopup = true;
+                bShowPopup = GetCustomerSetting(tblTreeSettings, "ShowPopup", "VTP_Rel_" + strRel);
+                var arg1 = names[names.length-2];
+                var arg2 = names[names.length-1];
+                break;
+            case "GS":
+                //bShowPopup = true;
+                bShowPopup = GetCustomerSetting(tblTreeSettings, "ShowPopup", "VTP_Rel_" + strRel);
+                var arg1 = names[names.length-3];
+                var arg2 = names[names.length-2];
+                var arg3 = names[names.length-1];
+                break;
+            case "KA":
+                break;
+            case "KAT":
+                //bShowPopup = true;
+                bShowPopup = GetCustomerSetting(tblTreeSettings, "ShowPopup", "VTP_Rel_" + strRel);
+                var arg1 = names[names.length-3];
+                var arg2 = names[names.length-2];
+                var arg3 = names[names.length-1];
+                break;
+            default:
+                alert('Verhalten für Nodetype "' + strRel + '" nicht festgelegt.');
+                break;
+        } // End switch(strRel)
+        
+        
+        var strVWSlink = "../objektverwaltung01Dwg.aspx?";
+        strVWSlink += "dwg=" + MetaData.OBJ_DWG;
+        strVWSlink += "&objuid=" + data.rslt.obj.attr("id");
+        strVWSlink += "&stichtag=" + "CURRENT_SERVER_TIME";
+        strVWSlink += "&usedwg=" + MetaData.OBJ_UseDWG;
+        strVWSlink += "&objid=" + MetaData.OBJ_ApertureObjID;
+        strVWSlink += "&proc=" + strProc;
+        strVWSlink += "&doleg=true";
+        //strVWSlink += "&xcltarget=_blank";
+        strVWSlink += "&xcltarget=SameWindowsAlways";
+        //alert(strVWSlink);
+        //alert(getStichtag());
+        
+        //var all = JSON.stringify(data);
+        //var all = JSON.stringify(data, null, "\t"); //
+        //document.getElementById("mytest").value = all;
+        
+
+        //$('#root > li > a')
+        //$('#root > a')
+        //$('ul#mygroup li select').each(function () {
+
+        // Fix jsTree bug
+        //$('#96286A8D-CFEB-4F8A-AFA4-C308D86419E1 > a').each(function () {
+        $('#' + strId + ' > a').each(function () {
+            //var whichonedidicatch = $(this).attr('href')
+            //alert(whichonedidicatch);
+            $(this).removeClass("jstree-clicked")
+        });
+        
+        
+        if(bShowPopup)
+        { 
+            var bDwgNotPresent = MetaData.OBJ_DWG == null || MetaData.OBJ_DWG == ""; 
+            if(bDwgNotPresent)
+            {
+                alert("Dieses Objekt ist mit keinem Aperture-Polygon verbunden.\nWurde das Objekt im Aperture-Client nicht erfasst ?");
+                return;
+            }
+            
+            
+            // New tab instead of window fix
+            // Note - location is everything, might break at any time 
+            // Therefore don't remove the code below return
+            //window.open(strVWSlink); // New tab
+            //JS_PopupCenterScreen(strVWSlink, 'form01','1250','864');
+            //return;
+
+            showWaitBox();
+            //alert("executing sql");
+            //window.setTimeout(showWaitBox, 1);
+
+            window.setTimeout(function() 
+            {
+                //JS_PopupCenterScreen(strVWSlink, 'form01','1400','975');
+                JS_PopupCenterScreen(strVWSlink, 'form01','1250','864');
+                hideWaitBox();
+                
+            }, 10)
+            
+
+            //alert("Arg1 (stao):" + arg1 + "\n" + "Arg2 (gb):" + arg2 + "\n" + "Arg3 (gs):" + arg3 + "\n" );
+            
+            //JS_PopupCenterScreen(strVWSlink, 'form01','1280','1024');
+            //JS_PopupCenterScreen(strVWSlink, 'form01','1250','900');
+        }
+        else
+        {
+            //MetaData.OBJ_UID
+            openNode("#" + strId);
+            //data.inst._get_parent(data.rslt.obj).open_node(this, false); 
+        }
+
+    });
+
+        //;
+    });
+
+    </script>
+
+</head>
+<body>
+    
+    <!--
+    <textarea id="mytest" style="width: 1000px; height: 1000px;">test
+    </textarea>
+    -->
+
+    
+    <a id="ieLink" href="http://localhost" target="_blank" style="display: none;">Do not remove me</a>
+    
+    <form name="form1" method="post" action="NavigationTree.aspx?log=&amp;mandant=000&amp;proc=administrator" id="form1">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTc5NjI0NTgwMA9kFgQCAQ9kFgICAg8WAh4EVGV4dAUPImFkbWluaXN0cmF0b3IiZAIDD2QWBAIBDw8WAh8ABRFaZWljaG51bmdzYXVzd2FobGRkAgMPDxYCHwAFDEJpdHRlIHdhcnRlbmRkZDbVwgQBu0ueLobbLub+44HuuObh" />
+</div>
+
+        
+        <div style="width: 100%;" >
+            <div class="awpageheader" style="display: table-cell; width: 10000px; vertical-align: middle; " >
+                    <span id="lbl_1">Zeichnungsauswahl</span>&nbsp;
+            </div>
+        </div>
+
+        <br />
+        
+        <div id="divPleaseWait" style="display: none; background-color: White; padding: 0.5cm; border: 1px solid gray; width: 150px; text-align: center;" >
+            <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                <img src="./img/pleasewait.gif" alt="Please wait" style="vertical-align: middle; " />
+                <span id="lbl_2" style="padding-left: 10px; vertical-align: middle; ">Bitte warten</span>
+
+                <span id="dots" style="vertical-align: middle;">...</span>
+            </div>
+        </div>
+
+
+        <div id="divJsTreeNavigation" >
+        </div>
+    </form>
+
+</body>
+</html>

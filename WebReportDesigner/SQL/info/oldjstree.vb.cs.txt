@@ -1,0 +1,191 @@
+using Microsoft.VisualBasic;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+
+using System.ComponentModel;
+using System.Globalization;
+using System.Web.Security;
+using System.Web;
+
+
+namespace JQuery.Plugins.TreeView.jsTreeView
+{
+
+	// http://www.jstree.com/
+	// http://bassistance.de/jquery-plugins/jquery-plugin-treeview/
+	// http://bassistance.de/jquery-plugins/jquery-plugin-message/
+	// http://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/
+	// http://mattfrear.com/2010/05/19/jstree/
+
+
+	// http://mohyuddin.blogspot.com/2009/05/binding-jstree-programmatically-with.html
+	public class JsTreeNode
+	{
+
+
+		public JsTreeNode()
+		{
+		}
+		// Constructor
+
+		private Attributes _attributes = new Attributes();
+		//public Attributes attributes
+
+
+		public Attributes attr {
+			get { return _attributes; }
+
+			set { _attributes = value; }
+		}
+		// attributes
+
+
+		private Data _data = new Data();
+		public Data data {
+			get { return _data; }
+
+			set { _data = value; }
+		}
+		// data
+
+
+		private string _state;
+		public string state {
+			get { return _state; }
+
+			set { _state = value; }
+		}
+		// state
+
+
+		private List<JsTreeNode> _children;
+		public List<JsTreeNode> children {
+			get { return _children; }
+
+			set { _children = value; }
+		}
+		// children
+
+
+	}
+	// JsTreeNode
+
+
+	public class Attributes
+	{
+
+
+		private string _id;
+		public string id {
+			get { return _id; }
+
+			set { _id = value; }
+		}
+		// id
+
+
+
+		private string _rel;
+		public string rel {
+			get { return _rel; }
+
+			set { _rel = value; }
+		}
+		// rel
+
+
+
+
+		private string _mdata;
+		public string mdata {
+			get { return _mdata; }
+
+			set { _mdata = value; }
+		}
+		// mdata
+
+
+	}
+	// Attributes
+
+
+
+	public class Data
+	{
+
+		private string _title;
+
+		public string title {
+			get { return _title; }
+
+			set { _title = value; }
+		}
+		// title
+
+
+		public cDataAttributes attr {
+			get { return _DataAttributes; }
+
+			set { _DataAttributes = value; }
+		}
+		// attr
+
+
+
+		private cDataAttributes _DataAttributes = new cDataAttributes();
+		public class cDataAttributes
+		{
+
+			private string _href;
+			public string href {
+				get { return _href; }
+
+				set { _href = value; }
+			}
+			// href
+
+
+
+
+			private string _target;
+			public string target {
+				get { return _target; }
+
+				set { _target = value; }
+			}
+			//target
+
+
+
+
+			private string _class;
+			public string @class {
+				get { return _class; }
+
+				set { _class = value; }
+			}
+			// class
+
+		}
+		// cDataAttributes
+
+
+
+		private string _icon;
+		public string icon {
+			get { return _icon; }
+
+			set { _icon = value; }
+		}
+		// icon
+
+
+	}
+	// Data
+
+
+}
+// JQuery.Plugins.TreeView.jsTreeView

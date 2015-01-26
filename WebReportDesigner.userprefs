@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="WebReportDesigner/MyAjax.ashx.cs">
+    <Files>
+      <File FileName="WebReportDesigner/MyAjax.ashx.cs" Line="34" Column="19" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/root/VS2010/WebReportDesigner/WebReportDesigner/jsTreeItem.cs" line="144" column="1" />
+      <Breakpoint file="/root/VS2010/WebReportDesigner/WebReportDesigner/jsTreeItem.cs" line="108" column="1" />
+      <Breakpoint file="/root/VS2010/WebReportDesigner/WebReportDesigner/DbLessAjax.ashx.cs" line="88" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

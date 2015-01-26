@@ -1,0 +1,1 @@
+https://test.wincasa-cafm.ch/COR_Basic_Wincasa/ajax/Basic_NavigationTree.ashx?no_cache_LastWriteTimeUtc=1362405846331&id=NULL&rel=ROOT&mdata=%7B%22OBJ_UID%22%3A%22NULL%22%2C%22OBJ_DWG%22%3A%22%22%2C%22OBJ_ApertureObjID%22%3A%22%22%2C%22OBJ_UseDWG%22%3A%22%22%7D&proc=200ceb26807d6bf99fd6f4f0d1ca54d4

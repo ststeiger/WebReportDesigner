@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <link type="text/css" rel="stylesheet" href="./assets/dist/themes/default/style.min.css" />
+
+    <script type="text/javascript" src="./Scripts/libs/jquery.js"></script>
+    <script type="text/javascript" src="./Scripts/jstree.js"></script>
+
+</head>
+<body>
+
+    <h1>Hi there</h1>
+    
+    <div id="jstree_demo"></div>
+
+    <br />
+    <hr />
+ 
+
+    <br />
+    <hr />
+    <div id="jstree2"></div>
+
+    <script type="text/javascript">
+
+
+
+
+
+        Date.prototype.getTicksUTC = function ()
+        {
+            return Date.parse(this.toUTCString()) + this.getUTCMilliseconds();
+        } // End Function getTicksUTC
+
+
+
+        function OnNodesRetrievedError(xhr, textstatus, errorThrown)
+        {
+            console.log("OnNodesRetrievedError");
+
+            if (xhr != null)
+            {
+                // console.log("xhr != null");
+                if (xhr.status != 200)
+                {
+                    if (xhr.status == 0)
+                    {
+                        // console.log("xhr.status == 0");
+                        // var strText = "status 0 appears when an ajax call was CANCELLED \n";
+                        // strText += "before getting the response by REFRESHING the page \n";
+                        // strText += "or by requesting a URL that is UNREACHABLE. \n";
+                        // strText += "this status is not documented but exist over ajax and makeRequest call's from gadget.io.\n";
+                    } // End if(xhr.status == 0)
+                    else
+                        alert(textstatus + "\n" + "HTTP " + xhr.status + "\n" + errorThrown);
+                } // End if(xhr.status != 200)
+                else
+                {
+                    // Parse error...
+                    alert("Non-Protocol-Error: " + textstatus);
+                }
+            }
+            else
+                alert("Error: xhr is null");
+        } // End Function OnNodesRetrievedError
+
+
+        function OnNodesRetrievedSuccess(result, textstatus, xhr)
+        {
+            // alert(JSON.stringify(result));
+            console.log("OnNodesRetrievedSuccess");
+
+            if (result != null && result.hasError)
+            {
+                if (result.error.sessionExpired)
+                {
+                    if (parent)
+                    {
+                        alert("Session expired");
+
+                        //if (parent.frmDMSmain)
+                        //    parent.frmDMSmain.window.location = "/COR_Basic_Wincasa/Portal/SessionExpired.aspx?no_cache_LastWriteTimeUtc=1362405852160?instance=B5214DB1-4340-4733-92AA-2BF224B39A9A&message=" + result.error.originalMessage;
+                        //else
+                        //    parent.location = "/COR_Basic_Wincasa/Portal/SessionExpired.aspx?no_cache_LastWriteTimeUtc=1362405852160?instance=B5214DB1-4340-4733-92AA-2BF224B39A9B&message=" + result.error.originalMessage;
+                    }
+                    else
+                        window.location = "/COR_Basic_Wincasa/Portal/SessionExpired.aspx?no_cache_LastWriteTimeUtc=1362405852160?instance=B5214DB1-4340-4733-92AA-2BF224B39A9C&message=" + result.error.originalMessage;
+                }
+                else
+                {
+                    alert("Beim Verarbeiten der Navigations-TreeView ist ein Fehler aufgetreten. \n\nFehlerbeschreibung: \n" + result.error.message + "\n\nStacktrace: \n" + result.error.stackTrace);
+                    return null;
+                }
+            }
+
+            // Has no effect anymore
+            // alert(result.data[0].id);
+            // return result.data;
+
+            //the ".d" is a security feature, annoying, but necessary
+            //return Sys.Serialization.JavaScriptSerializer.deserialize(data.d);
+        } // End Function OnNodesRetrievedSuccess
+
+
+        $(document).ready(function ()
+        {
+            $.ajaxSetup({ cache: false });
+            localStorage.clear();
+
+            ////////////////////////
+
+            $('#jstree_demo').jstree({
+                "core":
+                {
+                    "animation": 0
+                    , "check_callback": true
+                    , "themes": {
+                        //"stripes": true
+                        "dots": true
+                    }
+                    , 'data': // formerly json_data
+                    {
+                        'url': function (node)
+                        {
+                            var cache = "?no_cache=" + ((new Date()).getTicksUTC());
+                            var strURL = "SymLinkTest.ashx" + cache; // "&id=" + node.id + "&
+                            
+                            console.log(strURL);
+
+                            return strURL;
+                        }
+	                    , "async": true
+                        //, dataType: "text json"
+                        //, dataType: "jsonp"
+
+                        //,contentType: "application/json",
+
+			            , type: "POST"
+
+
+			            , "check_callback": function (node)
+			            {
+			                alert("node");
+			            }
+
+	                    , 'data': function (node)
+	                    {
+	                        console.log("data: ");
+	                        console.log(node.type);
+	                        console.log(node);
+
+	                        var obj = {
+	                            id: node.id ? node.id : "NULL"
+	                            //,rel: node.attr ? node.attr("rel") : "NULL"
+					            , data: node.data ? node.data : "NULL"
+	                            //,proc: strProc
+	                        } // End obj
+
+	                        return obj; // { 'id': node.id };
+	                    }
+
+
+	                    ,
+                        success: function (data, textstatus, xhr)
+                        {
+                            //alert(data);
+                            //alert(textstatus);
+                            //alert(xhr);
+                            console.log(data);
+                            OnNodesRetrievedSuccess(data, textstatus, xhr);
+                        } // End success
+
+
+
+	                    , "error": function (xhr, textstatus, errorThrown)
+	                    {
+	                        OnNodesRetrievedError(xhr, textstatus, errorThrown);
+	                        //var err = $.parseJSON(x.responseText);
+	                        /*
+	                        if (err!="")
+	                        {
+	                        alert(err);
+	                        }
+	                        */
+	                    }
+
+
+                    }
+                }
+
+            ,
+                "types":
+                {
+                    "#":
+                    {
+                        "max_children": 1
+                        , "max_depth": 4
+                        , "valid_children": ["root"]
+                    }
+                    , "root":
+                    {
+                        "icon": "./assets/images/tree_icon.png"
+                        , "valid_children": ["default"]
+                    }
+                    , "default":
+                    {
+                        "valid_children": ["default", "file"]
+                    }
+                    , "SO":
+                    {
+                        // "icon": "myicon.png",
+                        "valid_children": ["default", "GB"]
+                    }
+                    , "GB":
+                    {
+                        "valid_children": ["default", "GS"]
+                    }
+                    , "GS":
+                    {
+                        "valid_children": ["default", "RM"]
+                    }
+                    , "file":
+                    {
+                        "icon": "glyphicon glyphicon-file"
+                        , "valid_children": []
+                    }
+                }
+
+
+            ,
+                "themes":
+                {
+                    // "theme": "neoclassic-portal"
+                      "name": "neoclassic-portal"
+                    , "dots": true
+                    , "icons": true
+                    , "url": "/Content/jsTree/themes/apple/style.css"
+                }
+
+                //,"plugins": ["themes", "contextmenu", "dnd", "search", "state", "types", "wholerow"]
+			, "plugins": ["themes", "contextmenu", "dnd", "search", "state", "types"]
+            })
+        .bind("select_node.jstree", function (e, data)
+        {
+            console.log(data.node.id);
+            console.log(data.node);
+            console.log(data);
+        }
+        );
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }); // End $(document).ready(function () {
+    </script>
+
+
+</body>
+</html>

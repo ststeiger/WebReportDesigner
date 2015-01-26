@@ -1,0 +1,24 @@
+{
+  "error": {
+    "sessionExpired": false,
+    "message": "Value cannot be null.\r\nParameter name: value",
+    "originalMessage": "Value cannot be null.\r\nParameter name: value",
+    "source": "Newtonsoft.Json",
+    "stackTrace": "   at Newtonsoft.Json.JsonConvert.DeserializeObject(String value, Type type, JsonSerializerSettings settings)\r\n   at Newtonsoft.Json.JsonConvert.DeserializeObject[T](String value, JsonSerializerSettings settings)\r\n   at Newtonsoft.Json.JsonConvert.DeserializeObject[T](String value)\r\n   at COR_Library.COR.Tools.JSON.JsonHelper.Deserialize[T](String strValue) in D:\\Stefan.Steiger\\Documents\\Visual Studio 2010\\Projects\\COR-Library\\COR-Library\\AJAX\\JSONPrettyPrinting.vb:line 47\r\n   at Basic_NavigationTree.ProcessRequest(HttpContext context) in D:\\Stefan.Steiger\\Documents\\Visual Studio 2010\\Projects\\COR-Basic\\Basic\\Basic\\ajax\\Basic_NavigationTree.ashx.vb:line 64",
+    "innerException": {
+      "ClassName": "System.ArgumentNullException",
+      "Message": "Value cannot be null.",
+      "Data": null,
+      "InnerException": null,
+      "HelpURL": null,
+      "StackTraceString": "   at Newtonsoft.Json.JsonConvert.DeserializeObject(String value, Type type, JsonSerializerSettings settings)\r\n   at Newtonsoft.Json.JsonConvert.DeserializeObject[T](String value, JsonSerializerSettings settings)\r\n   at Newtonsoft.Json.JsonConvert.DeserializeObject[T](String value)\r\n   at COR_Library.COR.Tools.JSON.JsonHelper.Deserialize[T](String strValue) in D:\\Stefan.Steiger\\Documents\\Visual Studio 2010\\Projects\\COR-Library\\COR-Library\\AJAX\\JSONPrettyPrinting.vb:line 47\r\n   at Basic_NavigationTree.ProcessRequest(HttpContext context) in D:\\Stefan.Steiger\\Documents\\Visual Studio 2010\\Projects\\COR-Basic\\Basic\\Basic\\ajax\\Basic_NavigationTree.ashx.vb:line 64",
+      "RemoteStackTraceString": null,
+      "RemoteStackIndex": 0,
+      "ExceptionMethod": "8\nDeserializeObject\nNewtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed\nNewtonsoft.Json.JsonConvert\nSystem.Object DeserializeObject(System.String, System.Type, Newtonsoft.Json.JsonSerializerSettings)",
+      "HResult": -2147467261,
+      "Source": "Newtonsoft.Json",
+      "ParamName": "value"
+    }
+  },
+  "hasError": true
+}

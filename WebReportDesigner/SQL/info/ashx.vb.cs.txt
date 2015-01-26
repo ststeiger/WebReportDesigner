@@ -1,0 +1,213 @@
+using Microsoft.VisualBasic;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+
+using System.Web;
+using System.Web.Services;
+
+
+#if DMS
+using COR.SQL;
+#endif
+
+#if FMS
+using SQL.claSQL;
+#endif
+
+
+public class DMS_NavigationTree : System.Web.IHttpHandler, IRequiresSessionState
+{
+
+
+
+	protected const string IMG_PATH = "./bilder/";
+	#if FMS
+		#endif
+	protected const string MY_NAVIGATE_FRAME = "mainFrame";
+
+	#if DMS
+		#endif
+	protected const string MY_NAVIGATE_FRAME = "frmDMSmain";
+
+
+	protected const string DMS_REL_PATH = "dms/frames/desktop.aspx?uid=";
+	//Protected myNavigateUrl As String = "./frames/desktop.aspx?uid="
+
+	protected string myNavigateUrl = null;
+
+
+	public void ProcessRequest(HttpContext context)
+	{
+		context.Response.ContentType = "application/json";
+		COR.AJAX.cAjaxResult AjaxResult = new COR.AJAX.cAjaxResult();
+
+		#if DMS
+		try {
+			myNavigateUrl = "./frames/desktop.aspx?uid=";
+			#endif
+
+			#if FMS
+			string strBaseURL = COR.DMS.FM_SuiteSettings.GetAbsoluteDMS_URL();
+			//myNavigateUrl = System.IO.Path.Combine(strBaseURL, DMS_REL_PATH)
+			//http://localhost:65267/dms/frames/desktop.aspx?uid=
+			myNavigateUrl = CombineUri(strBaseURL, DMS_REL_PATH);
+			#endif
+
+			string strParentNodeID = COR.ASP.NET.GetParameter("id");
+			List<JQuery.Plugins.TreeView.jsTreeView.JsTreeNode> lsNodes = GetNodesJson(strParentNodeID);
+			AjaxResult.data = lsNodes;
+		//SafeSession.GetValue(Of String)("ThisEmulatesSessionExpiredBecauseAnInexistantKeyIsTreatedLikeSessionExpired")
+		//Throw New NullReferenceException("OMG something else is wrong")
+		} catch (Exception ex) {
+			AjaxResult.error = new COR.AJAX.AJAXException(ex);
+			if (!AjaxResult.error.sessionExpired) {
+				Elmah.ErrorSignal.FromCurrentContext.Raise(ex);
+			}
+		}
+
+		string strJSONresult = COR.Tools.JSON.JsonHelper.SerializePretty(AjaxResult);
+		context.Response.Write(strJSONresult);
+	}
+	// ProcessRequest
+
+
+	public static string CombineUri(string strPath1, string strPath2)
+	{
+		Uri baseUri = new Uri(strPath1, System.UriKind.Absolute);
+		Uri myUri = new Uri(baseUri, strPath2);
+
+		return myUri.AbsoluteUri;
+	}
+	// CombineUri
+
+
+	protected List<JQuery.Plugins.TreeView.jsTreeView.JsTreeNode> GetNodesJson(string id)
+	{
+		if (!(string.IsNullOrEmpty(id) | id == "0")) {
+			return GetChildNodes(id);
+		}
+
+		//Throw New Exception("testexception")
+		//Return COR.Tools.JSON.JsonHelper.SerializePretty(nodesList)
+		//Return COR.Tools.JSON.JsonHelper.SerializeUnpretty(nodesList)
+		return GetRootNode();
+	}
+	// GetNodesJson(string id)
+
+
+	protected List<JQuery.Plugins.TreeView.jsTreeView.JsTreeNode> GetRootNode()
+	{
+		string strSQL = "SELECT * FROM V_DMS_Navigation WHERE NAV_Stufe = 0 ORDER BY PJ_Nr ";
+
+		JQuery.Plugins.TreeView.jsTreeView.JsTreeNode node = new JQuery.Plugins.TreeView.jsTreeView.JsTreeNode();
+		using (DataTable dt = GetDataTable(strSQL, "Navigation")) {
+			node.attr.id = System.Convert.ToString(dt.Rows[0]["NAV_UID"]);
+			node.attr.rel = "testrel";
+			//node.attr.mdata = "{draggable : false,max_children : 1, max_depth :1}";
+
+
+			node.data.title = System.Convert.ToString(dt.Rows[0]["NAV_Bezeichnung"]);
+			node.data.attr.href = myNavigateUrl + node.attr.id;
+
+
+			node.data.attr.target = MY_NAVIGATE_FRAME;
+			node.data.attr.@class = "myclass";
+
+			//node.data.icon = "/DMS/bilder/root.gif"
+			//node.data.icon = "/DMS/bilder/projekt.gif"
+			//node.data.icon = "/DMS/bilder/folder_green.gif"
+			//node.data.icon = "/DMS/bilder/folder_red.gif"
+			//node.data.icon = "/DMS/bilder/folder_blue.gif"
+			//node.data.icon = "/DMS/bilder/folder.gif"
+
+			node.data.icon = IMG_PATH + System.Convert.ToString(dt.Rows[0]["NAV_Pic"]);
+			node.state = "closed";
+		}
+		// dt
+
+		strSQL = null;
+
+		List<JQuery.Plugins.TreeView.jsTreeView.JsTreeNode> nodesList = new List<JQuery.Plugins.TreeView.jsTreeView.JsTreeNode>();
+		nodesList.Add(node);
+
+		return nodesList;
+	}
+	// GetRootNode
+
+
+	protected List<JQuery.Plugins.TreeView.jsTreeView.JsTreeNode> GetChildNodes(string strParentNodeNav_UID)
+	{
+		List<JQuery.Plugins.TreeView.jsTreeView.JsTreeNode> nodesList = new List<JQuery.Plugins.TreeView.jsTreeView.JsTreeNode>();
+
+		#if DMS
+		try {
+			corBenutzer objTreeUser = SafeSession.GetValue<corBenutzer>("DMSUSER");
+			#endif
+
+			#if FMS
+			corStructures.CorUser objTreeUser = SafeSession.GetValue<corStructures.CorUser>("CorUser");
+			#endif
+
+
+			string strGroups = "'" + objTreeUser.GruppenIDs.Replace(",", "','") + "'";
+			using (System.Data.IDbCommand cmd = CreateCommandFromFile("GetNavigationTree.sql")) {
+				AddParameter(cmd, "in_isadmin", objTreeUser.isDMSAdmin);
+				AddParameter(cmd, "in_nav_parentuid", strParentNodeNav_UID);
+				AddParameter(cmd, "in_groups", strGroups);
+
+				using (System.Data.DataTable dt = GetDataTable(cmd)) {
+
+					JQuery.Plugins.TreeView.jsTreeView.JsTreeNode node = null;
+
+					foreach (System.Data.DataRow drThisRow in dt.Rows) {
+						node = new JQuery.Plugins.TreeView.jsTreeView.JsTreeNode();
+
+						node.attr.id = System.Convert.ToString(drThisRow["NAV_UID"]);
+						node.data.title = System.Convert.ToString(drThisRow["NAV_Bezeichnung"]);
+
+						node.data.icon = IMG_PATH + System.Convert.ToString(drThisRow["NAV_Pic"]);
+						node.data.attr.href = myNavigateUrl + node.attr.id;
+						node.data.attr.target = MY_NAVIGATE_FRAME;
+
+						if (System.Convert.ToInt64(drThisRow["ChildCount"]) > 0) {
+							node.state = "closed";
+						} else {
+							node.state = "leaf";
+						}
+
+						nodesList.Add(node);
+					}
+
+				}
+				// dt
+
+			}
+			// cmd
+
+		//Return COR.Tools.JSON.JsonHelper.SerializePretty(nodesList)
+
+		} catch (SessionExpiredException exSessionExpired) {
+		//Throw
+		} catch (Exception ex) {
+			//Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+			//COR.Debug.Output.MsgBox("Exception in navigation_TreeNodeExpanded." + vbCrLf + "Exception description:" + vbCrLf + ex.Message)
+			throw;
+		}
+
+		//Return COR.Tools.JSON.JsonHelper.SerializeUnpretty(nodesList)
+		return nodesList;
+	}
+	// GetChildNodes
+
+
+	public bool IsReusable {
+		get { return false; }
+	}
+	// IsReusable
+
+
+}
+// DMS_NavigationTree

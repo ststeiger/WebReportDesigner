@@ -1,0 +1,20 @@
+
+{
+	context.Response.Clear();
+	context.Response.ClearContent();
+	context.Response.ClearHeaders();
+	//context.Response.AddHeader("Content-Disposition", "attachment; filename=" + strFileName)
+	context.Response.AddHeader("Content-Disposition", Portal.ASP.NET.GetContentDisposition("Drucken.pdf", "inline"));
+	context.Response.AddHeader("Content-Length", baPDF.Length.ToString());
+	// context.Response.ContentType = "text/html"
+	// context.Response.ContentType = "application/msword"
+	// context.Response.ContentType = "application/octet-stream"
+
+	// http://superuser.com/questions/219870/how-to-open-pdf-in-chromes-integrated-viewer-without-downloading-it#
+	context.Response.ContentType = "application/pdf";
+
+	context.Response.BinaryWrite(baPDF);
+	//context.Response.Flush()
+
+	context.Response.End();
+}

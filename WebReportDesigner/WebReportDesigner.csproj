@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{24736F9C-683C-4D31-B20F-D39FBEF00E7E}</ProjectGuid>
+    <ProjectTypeGuids>{349C5851-65DF-11DA-9384-00065B846F21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebReportDesigner</RootNamespace>
+    <AssemblyName>WebReportDesigner</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Npgsql, Version=2.0.11.92, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Elmah">
+      <HintPath>Libs\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>Libs\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Posix">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\ajax_nodes.html" />
+    <Content Include="assets\apple-touch-icon-precomposed.png" />
+    <Content Include="assets\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="assets\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="assets\bootstrap\css\bootstrap.css" />
+    <Content Include="assets\bootstrap\css\bootstrap.min.css" />
+    <Content Include="assets\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="assets\bootstrap\js\bootstrap.js" />
+    <Content Include="assets\bootstrap\js\bootstrap.min.js" />
+    <Content Include="assets\dist\jstree.js" />
+    <Content Include="assets\dist\jstree.min.js" />
+    <Content Include="assets\dist\libs\jquery.js" />
+    <Content Include="assets\dist\libs\jquery.ui.touch.js" />
+    <Content Include="assets\dist\libs\require.js" />
+    <Content Include="assets\dist\themes\default\32px.png" />
+    <Content Include="assets\dist\themes\default\40px.png" />
+    <Content Include="assets\dist\themes\default\style.css" />
+    <Content Include="assets\dist\themes\default\style.min.css" />
+    <Content Include="assets\dist\themes\default\throbber.gif" />
+    <Content Include="assets\docs.css" />
+    <Content Include="assets\docs.js" />
+    <Content Include="assets\favicon.ico" />
+    <Content Include="assets\html5.js" />
+    <Content Include="assets\images\browsers.png" />
+    <Content Include="assets\images\find.png" />
+    <Content Include="assets\images\logo.png" />
+    <Content Include="assets\images\tree.png" />
+    <Content Include="assets\images\tree_icon.png" />
+    <Content Include="assets\jquery-1.10.2.min.js" />
+    <Content Include="assets\jquery.address-1.6.js" />
+    <Content Include="assets\respond.js" />
+    <Content Include="assets\vakata.js" />
+    <Content Include="BackStrat.txt" />
+    <Content Include="CrossDomainXmlRequest.aspx" />
+    <Content Include="Default.aspx" />
+    <Content Include="Index.html" />
+    <Content Include="Libs\AJAXExtensionsToolbox.dll" />
+    <Content Include="Libs\Elmah.dll" />
+    <Content Include="Libs\Linq4you.dll" />
+    <Content Include="Libs\Mono.Security.dll" />
+    <Content Include="Libs\Mono.WebServer2.dll" />
+    <Content Include="Libs\Newtonsoft.Json.dll" />
+    <Content Include="Libs\Npgsql.dll" />
+    <Content Include="Libs\System.Web.Extensions.Design.dll" />
+    <Content Include="Libs\System.Web.Extensions.dll" />
+    <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.1.js" />
+    <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="Scripts\jstree.js" />
+    <Content Include="Scripts\jstree.min.js" />
+    <Content Include="Scripts\libs\jquery.js" />
+    <Content Include="Scripts\libs\jquery.ui.touch.js" />
+    <Content Include="Scripts\libs\require.js" />
+    <Content Include="Scripts\themes\default\32px.png" />
+    <Content Include="Scripts\themes\default\40px.png" />
+    <Content Include="Scripts\themes\default\style.css" />
+    <Content Include="Scripts\themes\default\style.min.css" />
+    <Content Include="Scripts\themes\default\throbber.gif" />
+    <Content Include="Scripts\wgxpath.install.js" />
+    <Content Include="SQL\03_Insert_FloorTypes.sql" />
+    <Content Include="SQL\02_Insert_Buildings.sql" />
+    <Content Include="SQL\04_Insert_Floor.sql" />
+    <Content Include="SQL\01_Insert_Sites.sql" />
+    <Content Include="SQL\info\ajaxexception.vb.cs.txt" />
+    <Content Include="SQL\info\ajaxresult.vb.cs.txt" />
+    <Content Include="SQL\info\ashx.vb.cs.txt" />
+    <Content Include="SQL\info\corASPNET.vb.cs.txt" />
+    <Content Include="SQL\info\exdata.txt" />
+    <Content Include="SQL\info\exdataurl.txt" />
+    <Content Include="SQL\info\harhar.txt" />
+    <Content Include="SQL\info\inlinefiledisplay.vb.cs.txt" />
+    <Content Include="SQL\info\jsonhelper.vb.cs..txt" />
+    <Content Include="SQL\info\oldjstree.vb.cs.txt" />
+    <Content Include="SQL\info\old_exampledata.txt" />
+    <Content Include="SQL\info\wincasa_page.txt.htm" />
+    <Content Include="SQL\ZZ_PG_Update.sql" />
+    <Content Include="SQL\00_CreateTables.sql" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="DbLessAjax.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppCode\JsonHelper.cs" />
+    <Compile Include="CrossDomainXmlRequest.aspx.cs">
+      <DependentUpon>CrossDomainXmlRequest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CrossDomainXmlRequest.aspx.designer.cs">
+      <DependentUpon>CrossDomainXmlRequest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MyAjax.ashx.cs">
+      <DependentUpon>MyAjax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AppCode\oldNodeState.cs" />
+    <Compile Include="jsTreeItem.cs" />
+    <Compile Include="AppCode\AjaxResult.cs" />
+    <Compile Include="AppCode\AjaxException.cs" />
+    <Compile Include="DbLessAjax.ashx.cs">
+      <DependentUpon>DbLessAjax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="SQL.cs" />
+    <Compile Include="SymLinkTest.ashx.cs">
+      <DependentUpon>SymLinkTest.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="AppCode\Unrelated\SecTools.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ajax_children.json" />
+    <None Include="ajax_demo_children.json" />
+    <None Include="ajax_demo_roots.json" />
+    <None Include="assets\ajax_children.json" />
+    <None Include="assets\ajax_demo_children.json" />
+    <None Include="assets\ajax_demo_roots.json" />
+    <None Include="assets\ajax_roots.json" />
+    <None Include="assets\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <None Include="assets\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="assets\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="MyAjax.ashx" />
+    <None Include="Libs\Mono.Posix.dll" />
+    <Content Include="SymLinkTest.ashx" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349C5851-65DF-11DA-9384-00065B846F21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49630</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+    <MonoDevelop>
+      <Properties VerifyCodeBehindFields="True" VerifyCodeBehindEvents="True">
+        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
