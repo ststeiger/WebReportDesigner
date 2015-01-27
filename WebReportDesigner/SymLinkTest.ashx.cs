@@ -72,12 +72,15 @@ ORDER BY Sort, name
             {
                 string strId = context.Request.Params["id"];
                 string strData = context.Request.Params["data"];
-
-
+                string strPath = context.Request.Params["path"];
+                string path_id = context.Request.Params["path_id"];
+                
                 type_t EntityType = (type_t)Enum.Parse(typeof(type_t), strData, true);
 
                 System.Diagnostics.Debug.WriteLine(strId);
                 System.Diagnostics.Debug.WriteLine(strData);
+                System.Diagnostics.Debug.WriteLine(strPath);
+                System.Diagnostics.Debug.WriteLine(path_id);
                 System.Diagnostics.Debug.WriteLine(EntityType);
 
                 
@@ -96,8 +99,14 @@ ORDER BY Sort, name
                 foreach (System.Data.DataRow dr in dt.Rows)
                 {
                     TreeItem root = new TreeItem();
-					root.id = System.Convert.ToString(dr["Path_Id"]);
+                    //root.id = strPath + "/" + System.Convert.ToString(dr["Path_Id"]);
+
+                    // Trouble - symlink unfortunately has same id
+                    // but this id is only used by jsTree anyway
+                    root.id = System.Guid.NewGuid().ToString();
 					root.real_id = System.Convert.ToString(dr["real_path_id"]);
+                    root.path_id = System.Convert.ToString(dr["Path_Id"]);
+
 
                     root.text = System.Convert.ToString(dr["name"]);
                     root.children = System.Convert.ToBoolean(dr["HasChildren"]);
@@ -126,7 +135,6 @@ ORDER BY Sort, name
                 AjaxResult.error = new Tools.AJAX.AJAXException(ex);
                 strJSON = Tools.Serialization.JSON.Serialize(AjaxResult);
             }
-
 
             System.Diagnostics.Debug.WriteLine(strJSON);
             context.Response.ContentType = "application/json";

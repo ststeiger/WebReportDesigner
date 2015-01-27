@@ -128,7 +128,6 @@
                             var cache = "?no_cache=" + ((new Date()).getTicksUTC());
                             var strURL = "SymLinkTest.ashx" + cache; // "&id=" + node.id + "&
                             
-                            console.log(strURL);
                             return strURL;
                         }
 	                    , "async": true
@@ -148,8 +147,8 @@
 	                    , 'data': function (node)
 	                    {
 	                        console.log("data: ");
-	                        console.log(node.type);
-	                        console.log(node);
+	                        // console.log(node.type);
+	                        // console.log(node);
 	                        var obj = null;
 
 	                        //alert(JSON.stringify(node.original));
@@ -157,20 +156,16 @@
 
 	                        // alert(node.data.real_path_id);
 
-	                        // console.log(node);
-	                        if(node != null)
-	                        {
-	                        	console.log("bar");
-	                        	console.log(node.data);
-	                        }
-	                        //console.log($('#jstree_demo').jstree(true).get_path(node,"/"));
-	                        // var path = $('#jstree_demo').jstree(true).get_path(node,"/");
-
-
+	                        var node_path = this.get_path(node, "/", true);
+	                        if (!node_path)
+	                            node_path = "";
+	                        
 	                        if(node.original)
 	                        {
 		                        obj = {
-		                            id: node.original.real_id
+		                             id: node.original.real_id
+		                            // , path: node_path
+                                    , path_id: node.original.path_id
 		                            //,rel: node.attr ? node.attr("rel") : "NULL"
 						            , data: node.data ? node.data : "NULL"
 		                            //,proc: strProc
@@ -196,7 +191,7 @@
                             //alert(data);
                             //alert(textstatus);
                             //alert(xhr);
-                            console.log(data);
+                            // console.log(data);
                             OnNodesRetrievedSuccess(data, textstatus, xhr);
                         } // End success
 
