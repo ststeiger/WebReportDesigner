@@ -1,5 +1,5 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+﻿<Properties StartupItem="WebReportDesigner/WebReportDesigner.csproj" GitUserInfo="UsingMD">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="firefox" />
   <MonoDevelop.Ide.Workbench ActiveDocument="WebReportDesigner/MyAjax.ashx.cs">
     <Files>
       <File FileName="WebReportDesigner/MyAjax.ashx.cs" Line="34" Column="19" />

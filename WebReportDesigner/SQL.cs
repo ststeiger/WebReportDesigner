@@ -16,7 +16,7 @@ namespace WebReportDesigner
             if (StringComparer.OrdinalIgnoreCase.Equals(Environment.MachineName, "COR-W81-101"))
                 csb.Database = "testdb"; //"blogz";
             else
-                csb.Database = "testdb";
+				csb.Database = "sqlfs";
 
             csb.IntegratedSecurity = false;
             if (!csb.IntegratedSecurity)

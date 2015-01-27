@@ -30,16 +30,11 @@
     <div id="jstree2"></div>
 
     <script type="text/javascript">
-
-
-
-
-
+    	
         Date.prototype.getTicksUTC = function ()
         {
             return Date.parse(this.toUTCString()) + this.getUTCMilliseconds();
         } // End Function getTicksUTC
-
 
 
         function OnNodesRetrievedError(xhr, textstatus, errorThrown)
@@ -134,7 +129,6 @@
                             var strURL = "SymLinkTest.ashx" + cache; // "&id=" + node.id + "&
                             
                             console.log(strURL);
-
                             return strURL;
                         }
 	                    , "async": true
@@ -156,8 +150,37 @@
 	                        console.log("data: ");
 	                        console.log(node.type);
 	                        console.log(node);
+	                        var obj = null;
 
-	                        var obj = {
+	                        //alert(JSON.stringify(node.original));
+	                        //alert(JSON.stringify(node));
+
+	                        // alert(node.data.real_path_id);
+
+	                        // console.log(node);
+	                        if(node != null)
+	                        {
+	                        	console.log("bar");
+	                        	console.log(node.data);
+	                        }
+	                        //console.log($('#jstree_demo').jstree(true).get_path(node,"/"));
+	                        // var path = $('#jstree_demo').jstree(true).get_path(node,"/");
+
+
+	                        if(node.original)
+	                        {
+		                        obj = {
+		                            id: node.original.real_id
+		                            //,rel: node.attr ? node.attr("rel") : "NULL"
+						            , data: node.data ? node.data : "NULL"
+		                            //,proc: strProc
+		                        } // End obj
+
+		                        return obj;
+	                        }
+
+
+	                        obj = {
 	                            id: node.id ? node.id : "NULL"
 	                            //,rel: node.attr ? node.attr("rel") : "NULL"
 					            , data: node.data ? node.data : "NULL"
@@ -166,7 +189,6 @@
 
 	                        return obj; // { 'id': node.id };
 	                    }
-
 
 	                    ,
                         success: function (data, textstatus, xhr)
@@ -230,7 +252,7 @@
                     , "file":
                     {
                         "icon": "glyphicon glyphicon-file"
-                        , "valid_children": []
+                       , "valid_children": []
                     }
                 }
 
@@ -246,7 +268,8 @@
                 }
 
                 //,"plugins": ["themes", "contextmenu", "dnd", "search", "state", "types", "wholerow"]
-			, "plugins": ["themes", "contextmenu", "dnd", "search", "state", "types"]
+				//, "plugins": ["themes", "contextmenu", "dnd", "search", "state", "types"]
+				, "plugins": ["themes", "dnd", "search", "state", "types"]
             })
         .bind("select_node.jstree", function (e, data)
         {

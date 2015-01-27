@@ -24,6 +24,7 @@ namespace WebReportDesigner
             Folder,
             File,
             Symlink,
+			SYML
         } // End enum type_t 
 
 
@@ -33,16 +34,27 @@ namespace WebReportDesigner
 
             strId = strId.Replace("'", "''");
 
-            if (EntityType == type_t.NULL)
-            {
+            //if (EntityType == type_t.NULL)
+			if(true)
+			{
                 strSQL = @"
 SELECT 
-	 site_uid AS obj_uid 
-	,site_no || ' ' || site_text AS caption 
-	,EXISTS(SELECT * FROM building WHERE building_site_uid = site_uid) AS HasChildren 
-	,'" + type_t.Folder.ToString() + @"' AS objtype 
-FROM site 
-ORDER BY CAST(site_no as integer) 
+	 path_id 
+	,real_path_id 
+	,name 
+	,typ AS objtype 
+	,parent_path_id 
+	,(SELECT COUNT(*) FROM T_Paths AS p2 WHERE p2.parent_path_id = T_Paths.real_path_id) AS HasChildren 
+	,
+	CASE 
+		WHEN typ = 'Folder' THEN 0 
+		WHEN typ = 'SYML' THEN 0 
+		WHEN typ = 'File' THEN 1 
+		ELSE 3 
+	END AS Sort 
+FROM t_paths 
+WHERE parent_path_id = @abc 
+ORDER BY Sort, name 
 ";
 
                 return strSQL;
@@ -70,6 +82,12 @@ ORDER BY CAST(site_no as integer)
 
                 
                 string strSQL = GetSQL(strId, EntityType);
+
+				long lng;
+				long.TryParse(strId, out lng);
+
+				strSQL = strSQL.Replace("@abc", lng.ToString());
+
                 System.Data.DataTable dt = SQL.GetDataTable(strSQL);
 
 
@@ -78,8 +96,10 @@ ORDER BY CAST(site_no as integer)
                 foreach (System.Data.DataRow dr in dt.Rows)
                 {
                     TreeItem root = new TreeItem();
-                    root.id = System.Convert.ToString(dr["obj_uid"]);
-                    root.text = System.Convert.ToString(dr["caption"]);
+					root.id = System.Convert.ToString(dr["Path_Id"]);
+					root.real_id = System.Convert.ToString(dr["real_path_id"]);
+
+                    root.text = System.Convert.ToString(dr["name"]);
                     root.children = System.Convert.ToBoolean(dr["HasChildren"]);
                     root.state = NodeState.closed;
                     root.data = System.Convert.ToString(dr["objtype"]);

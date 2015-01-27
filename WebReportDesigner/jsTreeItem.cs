@@ -212,7 +212,8 @@ namespace jQuery.Plugins.jsTree.v3
 
 		//public class TreeItem
 		//{
-			public string id;
+		public string id;
+		public string real_id;
 			public string text;
 			public string icon;
 			//public string type;
